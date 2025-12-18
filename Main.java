@@ -90,11 +90,49 @@ public class Main {
 }
 
     public static String bestMonthForCommodity(String comm) {
-        return "DUMMY";
+        int cIndex = -1;
+        for (int i = 0; i < COMMS; i++) {
+            if (commodities[i].equals(comm)) cIndex = i;
+        }
+        if (cIndex == -1) return "INVALID_COMMODITY";
+
+        int max = Integer.MIN_VALUE;
+        int bestMonth = -1;
+
+        for (int m = 0; m < MONTHS; m++) {
+            int sum = 0;
+            for (int d = 0; d < DAYS; d++) {
+                sum += profit[m][d][cIndex];
+            }
+            if (sum > max) {
+                max = sum;
+                bestMonth = m;
+            }
+        }
+        return months[bestMonth];
     }
 
     public static int consecutiveLossDays(String comm) {
-        return 1234;
+        int cIndex = -1;
+        for (int i = 0; i < COMMS; i++) {
+            if (commodities[i].equals(comm)) cIndex = i;
+        }
+        if (cIndex == -1) return -1;
+
+        int maxStreak = 0;
+        int current = 0;
+
+        for (int m = 0; m < MONTHS; m++) {
+            for (int d = 0; d < DAYS; d++) {
+                if (profit[m][d][cIndex] < 0) {
+                    current++;
+                    if (current > maxStreak) maxStreak = current;
+                } else {
+                    current = 0;
+                }
+            }
+        }
+        return maxStreak;
     }
 
     public static int daysAboveThreshold(String comm, int threshold) {
